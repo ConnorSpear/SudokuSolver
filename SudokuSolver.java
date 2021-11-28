@@ -16,29 +16,36 @@ public class SudokuSolver {
 
     public static int[][] getGrid() {
 
-        Scanner sc = new Scanner(System.in);
-        int rows = 9;
-        int cols = 9;
-        grid = new int[rows][cols];
-        while (sc.hasNextLine()){
-            for (int i = 0; i < grid.length; i++){
-                String[] line = sc.nextLine().trim().split(" ");
-                if (line.length != 9){
-                    System.err.println("Wrong input size please use 9x9 and ensure 1 space between each number");
-                    System.exit(1);
-                }
-                for (int j = 0; j < line.length; j++){
-                    grid[i][j] = Integer.parseInt(line[j]);
+        try (Scanner sc = new Scanner(System.in)) {
+            int rows = 9;
+            int cols = 9;
+            grid = new int[rows][cols];
+            while (sc.hasNextLine()){
+                for (int i = 0; i < grid.length; i++){
+                    String[] line = sc.nextLine().trim().split(" ");
+                    if (line.length != 9){
+                        System.err.println("Wrong input size please use 9x9 and ensure 1 space between each number");
+                        System.exit(1);
+                    }
+                    for (int j = 0; j < line.length; j++){
+                        if (!line[j].matches("[0-9]{1}")){
+                            System.err.println("Sudoku input must only contain numbers 0-9 inclusive");
+                            System.exit(0);
+                        }
+                        grid[i][j] = Integer.parseInt(line[j]);
+                    }
                 }
             }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
         return grid;
     }
 
     public static void printMatrix(int[][] grid) {
-        for(int i = 0; i < grid.length; i++) {
-            for(int j = 0; j < grid[i].length; j++) {
-                System.out.print(grid[i][j] + " ");
+        for (int[] ints : grid) {
+            for (int anInt : ints) {
+                System.out.print(anInt + " ");
             }
             System.out.println();
         }
